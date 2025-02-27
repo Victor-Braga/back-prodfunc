@@ -38,6 +38,20 @@ export const handler = async (req: VercelRequest, res: VercelResponse) => {
     } catch (error) {
       return res.status(500).json({ error: "Erro ao autenticar usuário" });
     }
+  } else if (req.method === "GET" && req.url === "/api/auth/validate") {
+    // Validação do token
+    const token = req.headers['authorization']?.split(' ')[1]; // Pega o token da autorização
+    if (!token) {
+      return res.status(401).json({ error: 'Token não fornecido' });
+    }
+
+    try {
+      // Verifica o token com o Firebase Admin
+      const decodedToken = await admin.auth().verifyIdToken(token);
+      return res.status(200).json({ uid: decodedToken.uid });
+    } catch (error) {
+      return res.status(401).json({ error: 'Token inválido ou expirado' });
+    }
   } else {
     return res.status(405).json({ error: "Método não permitido" });
   }
