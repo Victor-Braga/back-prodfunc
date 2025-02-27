@@ -5,14 +5,14 @@ import cors from 'cors';
 // Configuração do CORS
 const corsMiddleware = cors({
   origin: 'https://prodfunc.vercel.app', // Permite apenas esse domínio
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 });
 
 const auth = admin.auth();
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Aplica o middleware CORS
+export default function handler(req: VercelRequest, res: VercelResponse) {
+  // Aplica o middleware CORS (responde à requisição OPTIONS)
   corsMiddleware(req, res, async () => {
     if (req.method === 'POST' && req.url === '/api/auth/register') {
       const { email, password } = req.body;
