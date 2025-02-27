@@ -3,7 +3,7 @@ import admin from "./firebaseAdmin"; // Importa Firebase já inicializado
 
 const auth = admin.auth();
 
-export const handler = async (req: VercelRequest, res: VercelResponse) => {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === "POST") {
     const { email, password } = req.body;
     try {
