@@ -7,6 +7,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const url = req.url ?? '';  // Fallback para string vazia caso seja undefined
     const method = req.method ?? ''; // Fallback para string vazia caso seja undefined
 
+  // Rota base para testar se o backend está funcionando
+  if (url === '/api') {
+    return res.status(200).json({ message: 'API está funcionando corretamente' });
+  }
 
   if (url.startsWith('/auth')) {
     // Roteamento para autenticação
