@@ -4,7 +4,7 @@ import admin from "./firebaseAdmin"; // Importa Firebase já inicializado
 const auth = admin.auth();
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method === "POST") {
+  if (req.method === 'POST' && req.url === '/api/auth/register') {
     const { email, password } = req.body;
     try {
       // Criar usuário no Firebase Authentication
@@ -16,13 +16,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
-  } else if (req.method === "GET") {
+  } else if (req.method === "POST" && req.url === "/api/auth/login") {
     const { email, password } = req.body;
     try {
+      // Verificação de usuário e senha deve ser feita no frontend com Firebase Auth
+      // Aqui, apenas geramos um token de login após autenticação com Firebase
       const user = await auth.getUserByEmail(email);
-      // Aqui você deve fazer a verificação de senha (isto pode ser feito no frontend com Firebase Auth)
-      // Após verificar a senha, gere um token para o usuário logado
-      const token = await auth.createCustomToken(user.uid);
+      // Para validar o login, você precisa usar o SDK do Firebase Auth no frontend para verificar a senha
+      const token = await auth.createCustomToken(user.uid); // Criação do token personalizado após login
       return res.status(200).json({ token });
     } catch (error) {
       return res.status(500).json({ error: "Erro ao autenticar usuário" });
