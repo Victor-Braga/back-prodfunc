@@ -1,7 +1,4 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import fetch from "node-fetch"; // Necessário para a requisição à API REST do Firebase Auth
-
-const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY; // Defina essa variável no ambiente
 
 // Função para configurar os cabeçalhos CORS
 const setCorsHeaders = (res: VercelResponse) => {
@@ -21,6 +18,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   setCorsHeaders(res);
 
   try {
+    // Função simples de teste para verificar se a API está funcionando
+    if (req.method === "GET" && req.url === "/api/test") {
+      return res.status(200).json({ message: "API está funcionando corretamente" });
+    }
+
+    // Função de login (POST) com Firebase Auth
     if (req.method === "POST" && req.url === "/api/auth/login") {
       const { email, password } = req.body;
 
@@ -28,7 +31,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(400).json({ error: "Email e senha são obrigatórios" });
       }
 
-      // Chamada à API REST do Firebase Auth para autenticar o usuário
+      const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY;
       const firebaseAuthUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`;
       const response = await fetch(firebaseAuthUrl, {
         method: "POST",
