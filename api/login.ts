@@ -18,13 +18,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   setCorsHeaders(res);
 
   try {
-    // Função simples de teste para verificar se a API está funcionando
-    if (req.method === "GET" && req.url === "/api/test") {
-      return res.status(200).json({ message: "API está funcionando corretamente" });
-    }
-
     // Função de login (POST) com Firebase Auth
-    if (req.method === "POST" && req.url === "/api/auth/login") {
+    if (req.method === "POST" && req.url === "/api/login") {
       const { email, password } = req.body;
 
       if (!email || !password) {
